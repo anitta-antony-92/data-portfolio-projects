@@ -1,4 +1,4 @@
-# Marketing Data Pipeline & Dashboard
+# Box-Office Data Pipeline & Dashboard
 
 ## Project Overview
 The goal of this project is to build a **data pipeline** that collects, processes, and visualizes marketing data (e.g., box office performance) to generate actionable insights. The pipeline includes the following steps:
@@ -65,7 +65,7 @@ The script [`data_processing_panda_postgresql.py`](scripts/data_processing_panda
 	- Create CSV files using SQL queries for tableau data source
 	- Create charts (e.g., bar charts, line charts) to visualize box office performance.
 	- Analyze trends (e.g., top-performing movies, revenue over time).
- - **Output**: Tableau Public dashboard is created - [`Dashboard`](https://public.tableau.com/app/profile/anitta.antony/viz/BoxOfficePerformanceAnalysis/BoxOfficePerformanceAnalysis?publish=yes)
+ - **Output**: Tableau Public dashboard is created - [`Box Office Performance Analysis`](https://public.tableau.com/app/profile/anitta.antony/viz/BoxOfficePerformanceAnalysis/BoxOfficePerformanceAnalysis?publish=yes)
 ---
 ## Folder Structure ##
 ```
@@ -73,6 +73,7 @@ marketing-data-pipeline/
 ├── data/                    				# Folder for raw and processed data (e.g., CSV files)
 │   ├── raw/                 				# Raw scraped data
 │   │   └── boxoffice_data.csv
+├── screenshots/                 				# Screenshots of scripts running in local machine
 ├── scripts/                 				# Folder for all Python scripts
 │   ├── web_scraping/        				# Web scraping scripts (BeautifulSoup, Selenium)
 │   │   └── scrape_imdb_boxoffice.py       			# Script for web scraping
@@ -82,7 +83,7 @@ marketing-data-pipeline/
 │   │   └── data_processing_panda_postgresql.py  	# Data transformation script
 │   ├── data_visualization/     			# Data analysis and visualization scripts (SQL)
 │   │   └── data_analysis.sql     			# Scripts/Queries for data analysis which later used in Tableau
-├── dashboard/               				# Visualization components
+├── dashboards/               				# Visualization components
 ├── README.md                				# Project overview and instructions
 ├── requirements.txt         				# List of Python dependencies
 └── .gitignore               				# Ignore unnecessary files (e.g., .env, __pycache__)
