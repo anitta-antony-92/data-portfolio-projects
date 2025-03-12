@@ -7,15 +7,12 @@ The goal of this project is to build a **data pipeline** that collects, processe
 2. **Data Storage**: Storing the scraped data in a PostgreSQL database.
 3. **Data Processing & Transformation**: Cleaning and transforming the data for analysis.
 4. **Data Visualization**: Creating visualizations to analyze the data.
-5. **Automation & Deployment**: Automating the pipeline and deploying the dashboard.
-
-
 
 ---
 
 
 ### 1. **Data Collection (Web Scraping)**
-- **Objective**: Collect box office data from IMDb.
+- **Objective**: Collect box office data from IMDb [`Link`](https://www.imdb.com/chart/boxoffice/).
 - **Tools Used**: Python, Selenium, BeautifulSoup.
 - **Script**: [`web_scraping.py`](scripts/web_scraping.py)
 - **Output**: A CSV file (`boxoffice_data.csv`) containing the scraped data.
@@ -34,36 +31,10 @@ The goal of this project is to build a **data pipeline** that collects, processe
 ### 2. **Data Storage (PostgreSQL)**
 - **Objective**: Store the scraped data in a PostgreSQL database.
 - **Tools Used**: PostgreSQL, Python (`psycopg2`).
-- **Script**: [`load_csv_to_db.py`](scripts/load_csv_to_db.py)
+- **Scripts**: [`database_and_table_creation.sql`](scripts/database_and_table_creation.sql), [`load_csv_to_db.py`](scripts/load_csv_to_db.py)
 - **Database**: `marketing_data`
 - **Table**: `boxoffice`
 
-#### Table Schema
-```sql
-CREATE TABLE boxoffice (
-    id SERIAL PRIMARY KEY,
-    title TEXT NOT NULL,
-    weekend_gross NUMERIC,
-    total_gross NUMERIC,
-    weeks INTEGER
-);
-```
-
-### Steps to Load Data
-1. **Create the Database**:
-   ```sql
-   CREATE DATABASE marketing_data;
-   ```
-2. **Create the Table**:
-    ```sql
-    CREATE TABLE boxoffice (
-    id SERIAL PRIMARY KEY,
-    title TEXT NOT NULL,
-    weekend_gross NUMERIC,
-    total_gross NUMERIC,
-    weeks INTEGER
-    );
-    ```
 ### Run the Script
 The script [`load_csv_to_db.py`](scripts/load_csv_to_db.py) reads the CSV file, cleans the data, and inserts it into the `boxoffice` table.
 
@@ -86,34 +57,35 @@ The script [`data_processing_panda_postgresql.py`](scripts/data_processing_panda
   ![boxoffice_transformed](screenshots/postgresql_db_box_office_table_after_transformation.png)
 
 
-### 4. **Data Visualization** 
+### 4. **Data Analysis & Visualization** 
 - **Objective**: Create visualizations to analyze the data.
-- **Tools Used**: Python (matplotlib, seaborn), Looker Studio, Tableau.
+- **Tools Used**: PostGreSQL, Tableau Desktop.
+- **Script**: [`data_analysis.sql`](scripts/data_analysis.sql)
 - **Tasks**:
+	- Create CSV files using SQL queries for tableau data source
 	- Create charts (e.g., bar charts, line charts) to visualize box office performance.
 	- Analyze trends (e.g., top-performing movies, revenue over time).
-
-### 5. **Automation & Deployment**  
-- **Objective**: Automate the pipeline and deploy the dashboard.
-- **Tools Used**: Apache Airflow, Cron, Flask/Dash, Streamlit.
-- **Tasks**:
-	- Schedule the pipeline to run daily/weekly.
-	- Deploy the dashboard using Streamlit or Flask/Dash.
-
-### Folder Structure ###
+ - **Output**: Tableau Public dashboard is created - [`Dashboard`](https://public.tableau.com/app/profile/anitta.antony/viz/BoxOfficePerformanceAnalysis/BoxOfficePerformanceAnalysis?publish=yes)
+---
+## Folder Structure ##
 ```
 marketing-data-pipeline/
-├── data/
-│   ├── raw/                 # Raw scraped data
+├── data/                    				# Folder for raw and processed data (e.g., CSV files)
+│   ├── raw/                 				# Raw scraped data
 │   │   └── boxoffice_data.csv
-├── scripts/
-│   ├── web_scraping.py       # Script for web scraping
-│   ├── load_csv_to_db.py     # Script to load data into PostgreSQL
-│   ├── data_processing_panda_postgresql.py  # Data transformation script
-├── dashboard/                # Visualization components
-├── screenshots/              # Screenshots of database & reports
-├── README.md                 # Documentation
-
+├── scripts/                 				# Folder for all Python scripts
+│   ├── web_scraping/        				# Web scraping scripts (BeautifulSoup, Selenium)
+│   │   └── web_scraping.py       			# Script for web scraping
+│   ├── data_loading/        				# Loading data into PostgreSQL
+│   │   └── load_csv_to_db.py     			# Script to load data into PostgreSQL
+│   ├── data_processing/     				# Data cleaning and transformation scripts (Pandas, SQL)
+│   │   └── data_processing_panda_postgresql.py  	# Data transformation script
+│   ├── data_visualization/     			# Data analysis and visualization scripts (SQL)
+│   │   └── data_analysis.sql     			# Scripts/Queries for data analysis which later used in Tableau
+├── dashboard/               				# Visualization components
+├── README.md                				# Project overview and instructions
+├── requirements.txt         				# List of Python dependencies
+└── .gitignore               				# Ignore unnecessary files (e.g., .env, __pycache__)
 ```
 ## How to Run the Project
 
@@ -122,26 +94,18 @@ marketing-data-pipeline/
 - **PostgreSQL**: Install PostgreSQL and create a database (`marketing_data`).
 - **Libraries**: Install the required Python libraries:
   ```bash
-  pip install psycopg2 selenium beautifulsoup4 pandas
+  pip install psycopg2 selenium beautifulsoup4 pandas sqlalchemy
   ```
 ## Steps
+1. Clone this repository.
+2. Install dependencies: `pip install -r requirements.txt`.
+3. Set up PostgreSQL and run [`database_and_table_creation.sql`](scripts/database_and_table_creation.sql)` to create the database schema.
+4. Run the web scraping script [`web_scraping.py`](scripts/web_scraping.py).
+5. Load the data using  [`load_csv_to_db.py`](scripts/load_csv_to_db.py)
+6. Process the data using scripts in [`data_processing_panda_postgresql.py`](scripts/data_processing_panda_postgresql.py).
+7. Export data analysis results to CSV files using [`data_analysis.sql`](scripts/data_analysis.sql)
+8. Connect the data to Tableau for visualization.
 
-### 1. Web Scraping
-Run the `web_scraping.py` script to collect box office data:
-```bash
-python scripts/web_scraping.py
-```
-The output will be saved as boxoffice_data.csv in the data/raw/ folder.
 
-### 2. Load Data into PostgreSQL
-Run the `load_csv_to_db.py` script to load the CSV data into PostgreSQL:
-```bash
-  python scripts/load_csv_to_db.py
-```
-### 3. Verify the Data
-Connect to the marketing_data database and query the boxoffice table:
-```sql
-  SELECT * FROM boxoffice;
-```
 
 
