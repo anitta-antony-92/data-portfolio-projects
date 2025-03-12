@@ -14,7 +14,7 @@ The goal of this project is to build a **data pipeline** that collects, processe
 ### 1. **Data Collection (Web Scraping)**
 - **Objective**: Collect box office data from IMDb [`Link`](https://www.imdb.com/chart/boxoffice/).
 - **Tools Used**: Python, Selenium, BeautifulSoup.
-- **Script**: [`web_scraping.py`](scripts/web_scraping.py)
+- **Script**: [`scrape_imdb_boxoffice.py`](scripts/scrape_imdb_boxoffice.py)
 - **Output**: A CSV file (`boxoffice_data.csv`) containing the scraped data.
 
 #### Sample Data
@@ -75,7 +75,7 @@ marketing-data-pipeline/
 │   │   └── boxoffice_data.csv
 ├── scripts/                 				# Folder for all Python scripts
 │   ├── web_scraping/        				# Web scraping scripts (BeautifulSoup, Selenium)
-│   │   └── web_scraping.py       			# Script for web scraping
+│   │   └── scrape_imdb_boxoffice.py       			# Script for web scraping
 │   ├── data_loading/        				# Loading data into PostgreSQL
 │   │   └── load_csv_to_db.py     			# Script to load data into PostgreSQL
 │   ├── data_processing/     				# Data cleaning and transformation scripts (Pandas, SQL)
@@ -100,12 +100,42 @@ marketing-data-pipeline/
 1. Clone this repository.
 2. Install dependencies: `pip install -r requirements.txt`.
 3. Set up PostgreSQL and run [`database_and_table_creation.sql`](scripts/database_and_table_creation.sql)` to create the database schema.
-4. Run the web scraping script [`web_scraping.py`](scripts/web_scraping.py).
+4. Run the web scraping script [`scrape_imdb_boxoffice.py`](scripts/scrape_imdb_boxoffice.py).
 5. Load the data using  [`load_csv_to_db.py`](scripts/load_csv_to_db.py)
 6. Process the data using scripts in [`data_processing_panda_postgresql.py`](scripts/data_processing_panda_postgresql.py).
 7. Export data analysis results to CSV files using [`data_analysis.sql`](scripts/data_analysis.sql)
 8. Connect the data to Tableau for visualization.
 
 
+## Data Pipeline
 
+```
+  IMDb Box Office Website  
+          │  
+          ▼  
+  [Web Scraping] - **scrape_imdb_boxoffice.py**  
+  **Tools:** Selenium, BeautifulSoup, Python  
+          │  
+          ▼  
+  boxoffice_data.csv (Raw Data)  
+          │  
+          ▼  
+  [Data Storage] - **load_csv_to_db.py**  (boxoffice Table)**  
+  **Tools:** PostgreSQL, psycopg2, SQLAlchemy  
+          │  
+          ▼  
+  [Data Processing] - **data_processing_panda_postgresql.py**  
+  **Tools:** Pandas, SQL  
+          │  
+          ▼  
+  boxoffice_transformed (Cleaned Data)  
+          │  
+          ▼  
+  [Data Analysis] - **data_analysis.sql (Exported to CSV)**  
+  **Tools:** SQL, PostgreSQL  
+          │  
+          ▼  
+  [Visualization] - **Tableau Dashboard**  
+  **Tools:** Tableau Desktop, Tableau Public  
 
+```
