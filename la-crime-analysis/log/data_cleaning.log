@@ -1,0 +1,50 @@
+2025-03-16 02:53:31,728 - INFO - Data cleaning started.
+2025-03-16 02:53:31,965 - INFO - Dataset loaded successfully.
+2025-03-16 02:53:31,965 - INFO - Total records in the dataset: 1005104
+2025-03-16 02:53:31,965 - INFO - Handling missing values...
+2025-03-16 02:53:32,028 - INFO - Missing categorical values handled successfully.
+2025-03-16 02:53:32,028 - INFO - Imputing missing numerical values using KNN imputer...
+2025-03-16 02:57:07,779 - INFO - Completed step: KNN Imputation
+2025-03-16 02:57:07,779 - INFO - Progress: 9.95% completed (100000/1005104 records).
+2025-03-16 02:57:07,779 - INFO - Elapsed time: 0:03:35.
+2025-03-16 03:00:47,796 - INFO - Completed step: KNN Imputation
+2025-03-16 03:00:47,796 - INFO - Progress: 19.90% completed (200000/1005104 records).
+2025-03-16 03:00:47,796 - INFO - Elapsed time: 0:07:15.
+2025-03-16 03:04:26,984 - INFO - Completed step: KNN Imputation
+2025-03-16 03:04:26,986 - INFO - Progress: 29.85% completed (300000/1005104 records).
+2025-03-16 03:04:26,986 - INFO - Elapsed time: 0:10:55.
+2025-03-16 03:08:04,188 - INFO - Completed step: KNN Imputation
+2025-03-16 03:08:04,188 - INFO - Progress: 39.80% completed (400000/1005104 records).
+2025-03-16 03:08:04,188 - INFO - Elapsed time: 0:14:32.
+2025-03-16 03:11:46,285 - INFO - Completed step: KNN Imputation
+2025-03-16 03:11:46,285 - INFO - Progress: 49.75% completed (500000/1005104 records).
+2025-03-16 03:11:46,285 - INFO - Elapsed time: 0:18:14.
+2025-03-16 03:15:31,292 - INFO - Completed step: KNN Imputation
+2025-03-16 03:15:31,292 - INFO - Progress: 59.70% completed (600000/1005104 records).
+2025-03-16 03:15:31,292 - INFO - Elapsed time: 0:21:59.
+2025-03-16 03:19:16,820 - INFO - Completed step: KNN Imputation
+2025-03-16 03:19:16,820 - INFO - Progress: 69.64% completed (700000/1005104 records).
+2025-03-16 03:19:16,820 - INFO - Elapsed time: 0:25:44.
+2025-03-16 03:23:02,852 - INFO - Completed step: KNN Imputation
+2025-03-16 03:23:02,852 - INFO - Progress: 79.59% completed (800000/1005104 records).
+2025-03-16 03:23:02,852 - INFO - Elapsed time: 0:29:30.
+2025-03-16 03:26:54,217 - INFO - Completed step: KNN Imputation
+2025-03-16 03:26:54,217 - INFO - Progress: 89.54% completed (900000/1005104 records).
+2025-03-16 03:26:54,217 - INFO - Elapsed time: 0:33:22.
+2025-03-16 03:31:07,447 - INFO - Completed step: KNN Imputation
+2025-03-16 03:31:07,447 - INFO - Progress: 99.49% completed (1000000/1005104 records).
+2025-03-16 03:31:07,447 - INFO - Elapsed time: 0:37:35.
+2025-03-16 03:31:08,105 - INFO - Completed step: KNN Imputation
+2025-03-16 03:31:08,105 - INFO - Progress: 100.00% completed (1005104/1005104 records).
+2025-03-16 03:31:08,105 - INFO - Elapsed time: 0:37:36.
+2025-03-16 03:31:08,138 - INFO - KNN imputation completed successfully.
+2025-03-16 03:31:08,138 - INFO - Formatting dates and times...
+2025-03-16 03:31:08,339 - INFO - Date and time formatting completed successfully.
+2025-03-16 03:31:08,339 - INFO - Encoding categorical variables using Target Encoding...
+2025-03-16 03:31:08,378 - INFO - Categorical variable encoding completed successfully.
+2025-03-16 03:31:08,378 - INFO - Renaming columns to a standard format...
+2025-03-16 03:31:08,378 - INFO - Column renaming completed successfully.
+2025-03-16 03:31:08,378 - INFO - Saving the cleaned data...
+2025-03-16 03:31:09,002 - INFO - Cleaned data saved successfully to C:\Users\Anitta\data-portfolio-projects\la-crime-analysis\data\processed_data\pre_cleaned_crime_data.parquet.
+2025-03-16 03:31:09,002 - INFO - Data cleaning completed: 100% completed.
+2025-03-16 03:31:09,002 - INFO - Total elapsed time: 0:37:37.
