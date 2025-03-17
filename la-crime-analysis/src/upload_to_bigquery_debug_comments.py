@@ -19,6 +19,9 @@ os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r"C:\Users\Anitta\Desktop\Data_Pr
 
 # Initialize a BigQuery client
 client = bigquery.Client()
+# client is an instance of the BigQuery client (google.cloud.bigquery.Client).
+# bigquery.Client() is a constructor from the google-cloud-bigquery Python library.
+# The client object is used to perform operations like creating datasets, tables, and running queries.
 
 # Define the dataset and table name
 dataset_id = 'la_crime_dataset'
@@ -26,14 +29,27 @@ table_id = 'crime_data'
 
 # Create the dataset if it doesn't exist
 dataset_ref = client.dataset(dataset_id)
+# client.dataset(dataset_id) creates a reference to the dataset named la_crime_dataset.
+# This reference is stored in dataset_ref.
+
 try:
     client.get_dataset(dataset_ref)
     print(f'Dataset {dataset_id} already exists.')
 except Exception:
     dataset = bigquery.Dataset(dataset_ref)
+    # creates a new Dataset object in memory using the provided dataset_ref.
+    # This object is not yet created in BigQuery;
+    # it is just a local representation that you can configure before sending it to BigQuery.
+    # This object represents a BigQuery dataset and allows you to configure its properties
+    # (e.g., location, description, access controls) before actually creating it in BigQuery
     dataset.location = 'US'
     client.create_dataset(dataset)
     print(f'Created dataset {dataset_id}.')
+
+# In the context of Google BigQuery, a dataset is a container that holds tables and views.
+# It is similar to a schema in traditional relational databases.
+# Datasets are used to organize and control access to tables and views within a Google Cloud project.
+# Dataset as a Container: A dataset is a logical grouping of tables and views within a Google Cloud project.
 
 # Delete the existing table if it exists
 table_ref = dataset_ref.table(table_id)
@@ -82,6 +98,14 @@ schema = [
 # Create the table
 try:
     table = client.create_table(bigquery.Table(table_ref, schema=schema))
+    # bigquery.Table is a class that represents a BigQuery table.
+    # table_ref specifies the table's location (project, dataset, and table name).
+        # table_ref = dataset_ref.table(table_id)
+            # dataset_ref = client.dataset(dataset_id)
+                # dataset_id = 'la_crime_dataset'
+            # table_id = 'crime_data'
+        # table_ref = client.dataset('la_crime_dataset').table('crime_data')
+    # schema defines the structure of the table (column names, data types, etc.).
     print(f'Created table {table_id}.')
 except Exception as e:
     print(f'Error creating table: {e}')
