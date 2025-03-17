@@ -1,0 +1,83 @@
+Steps to Check for Additional Cleanup Needs
+
+Check for Missing Values:
+Verify if there are any missing values in critical columns (e.g., crm_cd, date_occ, area).
+
+Check for Duplicates:
+Ensure there are no duplicate rows in the dataset.
+
+Check for Inconsistencies:
+Look for inconsistencies in categorical columns (e.g., different spellings of the same category).
+
+Check Data Types:
+Ensure columns have the correct data types (e.g., timestamps are in TIMESTAMP format, numerical columns are in INT64 or FLOAT64).
+
+Check for Outliers:
+Identify outliers in numerical columns (e.g., vict_age).
+
+SQL Queries to Check for Data Issues
+
+1. Check for Missing Values - Fill Missing Values
+If there are missing values in important columns, fill them with a default value:
+
+SELECT
+  COUNT(*) AS total_rows,
+  COUNTIF(crm_cd IS NULL) AS missing_crm_cd,
+  COUNTIF(time_occ IS NULL) AS missing_timestamp,
+  COUNTIF(area IS NULL) AS missing_area
+FROM
+  `la-crime-analysis.la_crime_dataset.crime_data`;
+
+2. Check for Duplicates
+Remove duplicate rows based on a unique identifier or combination of columns:
+
+SELECT
+  *,
+  COUNT(*) AS duplicate_count
+FROM
+  `la-crime-analysis.la_crime_dataset.crime_data`
+GROUP BY
+  crm_cd, date_occ, area, vict_age, weapon_used_cd
+HAVING
+  COUNT(*) > 1;
+
+3. Check for Inconsistencies in Categorical Columns
+For example, check for inconsistent values in crm_cd:
+
+
+4. Check Data Types
+You can inspect the schema of the table to ensure data types are correct:
+If a column (e.g., date_occ) is stored as a string, convert it to a timestamp:
+
+
+SELECT
+  column_name,
+  data_type
+FROM
+  `la-crime-analysis.la_crime_dataset.INFORMATION_SCHEMA.COLUMNS`
+WHERE
+  table_name = 'crime_data';
+
+5. Check for Outliers in Numerical Columns
+For example, check for outliers in vict_age: Cap vict_age at a reasonable value (e.g., 100):
+
+
+SELECT
+  MIN(vict_age) AS min_age,
+  MAX(vict_age) AS max_age,
+  AVG(vict_age) AS avg_age
+FROM
+  `la-crime-analysis.la_crime_dataset.crime_data`;
+  
+6. Standardize Categorical Columns
+Convert column_name to lowercase for consistency:
+
+Best Practices for Cleanup
+Backup Your Data:
+
+Before making any changes, create a backup of your table:
+
+CREATE TABLE `la-crime-analysis.la_crime_dataset.crime_data_backup` AS
+SELECT * FROM `la-crime-analysis.la_crime_dataset.crime_data`;
+
+

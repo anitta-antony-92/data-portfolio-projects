@@ -1,0 +1,217 @@
+EDA Queries for Crime Data
+
+1. Total Number of Crimes
+
+SELECT
+  COUNT(*) AS total_crimes
+FROM
+  `la-crime-analysis.la_crime_dataset.crime_data`;
+
+2. Crime Distribution by Type
+SELECT
+  crime_type,
+  COUNT(*) AS crime_count
+FROM
+  `la-crime-analysis.la_crime_dataset.crime_data`
+GROUP BY
+  crime_type
+ORDER BY
+  crime_count DESC;
+
+
+3. Crime Trends Over Time
+Analyze the number of crimes by year and month:
+
+SELECT
+  EXTRACT(YEAR FROM timestamp_column) AS year,
+  EXTRACT(MONTH FROM timestamp_column) AS month,
+  COUNT(*) AS crime_count
+FROM
+  `la-crime-analysis.la_crime_dataset.crime_data`
+GROUP BY
+  year, month
+ORDER BY
+  year, month;
+
+Replace timestamp_column with the actual timestamp column name (e.g., report_date).
+
+
+4. Crime by Hour of Day
+
+SELECT
+  EXTRACT(HOUR FROM timestamp_column) AS hour_of_day,
+  COUNT(*) AS crime_count
+FROM
+  `la-crime-analysis.la_crime_dataset.crime_data`
+GROUP BY
+  hour_of_day
+ORDER BY
+  hour_of_day;
+
+
+5. Crime by Day of Week
+
+SELECT
+  EXTRACT(DAYOFWEEK FROM timestamp_column) AS day_of_week,
+  COUNT(*) AS crime_count
+FROM
+  `la-crime-analysis.la_crime_dataset.crime_data`
+GROUP BY
+  day_of_week
+ORDER BY
+  day_of_week;
+
+
+6. Top 10 Locations with Highest Crime
+
+SELECT
+  location,
+  COUNT(*) AS crime_count
+FROM
+  `la-crime-analysis.la_crime_dataset.crime_data`
+GROUP BY
+  location
+ORDER BY
+  crime_count DESC
+LIMIT 10;
+
+
+7. Crime Distribution by Area
+
+SELECT
+  area_name,
+  COUNT(*) AS crime_count
+FROM
+  `la-crime-analysis.la_crime_dataset.crime_data`
+GROUP BY
+  area_name
+ORDER BY
+  crime_count DESC;
+
+
+8. Crime by Victim Age Group
+If there's a victim_age column:
+
+SELECT
+  CASE
+    WHEN victim_age < 18 THEN 'Under 18'
+    WHEN victim_age BETWEEN 18 AND 30 THEN '18-30'
+    WHEN victim_age BETWEEN 31 AND 50 THEN '31-50'
+    WHEN victim_age > 50 THEN 'Over 50'
+    ELSE 'Unknown'
+  END AS age_group,
+  COUNT(*) AS crime_count
+FROM
+  `la-crime-analysis.la_crime_dataset.crime_data`
+GROUP BY
+  age_group
+ORDER BY
+  crime_count DESC;
+
+
+9. Crime by Weapon Type
+If there's a weapon_type column:
+
+SELECT
+  weapon_type,
+  COUNT(*) AS crime_count
+FROM
+  `la-crime-analysis.la_crime_dataset.crime_data`
+GROUP BY
+  weapon_type
+ORDER BY
+  crime_count DESC;
+
+
+10. Crime by Time of Day
+Categorize crimes into "Morning", "Afternoon", "Evening", and "Night":
+
+SELECT
+  CASE
+    WHEN EXTRACT(HOUR FROM timestamp_column) BETWEEN 6 AND 12 THEN 'Morning'
+    WHEN EXTRACT(HOUR FROM timestamp_column) BETWEEN 12 AND 18 THEN 'Afternoon'
+    WHEN EXTRACT(HOUR FROM timestamp_column) BETWEEN 18 AND 24 THEN 'Evening'
+    ELSE 'Night'
+  END AS time_of_day,
+  COUNT(*) AS crime_count
+FROM
+  `la-crime-analysis.la_crime_dataset.crime_data`
+GROUP BY
+  time_of_day
+ORDER BY
+  crime_count DESC;
+
+
+11. Crime by Season
+Categorize crimes into seasons based on the month:
+
+SELECT
+  CASE
+    WHEN EXTRACT(MONTH FROM timestamp_column) IN (12, 1, 2) THEN 'Winter'
+    WHEN EXTRACT(MONTH FROM timestamp_column) IN (3, 4, 5) THEN 'Spring'
+    WHEN EXTRACT(MONTH FROM timestamp_column) IN (6, 7, 8) THEN 'Summer'
+    WHEN EXTRACT(MONTH FROM timestamp_column) IN (9, 10, 11) THEN 'Fall'
+  END AS season,
+  COUNT(*) AS crime_count
+FROM
+  `la-crime-analysis.la_crime_dataset.crime_data`
+GROUP BY
+  season
+ORDER BY
+  crime_count DESC;
+
+
+12. Crime by Victim Gender
+If there's a victim_gender column:
+
+SELECT
+  victim_gender,
+  COUNT(*) AS crime_count
+FROM
+  `la-crime-analysis.la_crime_dataset.crime_data`
+GROUP BY
+  victim_gender
+ORDER BY
+  crime_count DESC;
+
+
+13. Crime by Premise Type
+If there's a premise_type column:
+
+SELECT
+  premise_type,
+  COUNT(*) AS crime_count
+FROM
+  `la-crime-analysis.la_crime_dataset.crime_data`
+GROUP BY
+  premise_type
+ORDER BY
+  crime_count DESC;
+
+
+14. Crime by Status
+If there's a crime_status column (e.g., "Open", "Closed"):
+
+SELECT
+  crime_status,
+  COUNT(*) AS crime_count
+FROM
+  `la-crime-analysis.la_crime_dataset.crime_data`
+GROUP BY
+  crime_status
+ORDER BY
+  crime_count DESC;
+
+
+15. Crime by Year
+
+SELECT
+  EXTRACT(YEAR FROM timestamp_column) AS year,
+  COUNT(*) AS crime_count
+FROM
+  `la-crime-analysis.la_crime_dataset.crime_data`
+GROUP BY
+  year
+ORDER BY
+  year;
+
