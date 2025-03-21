@@ -41,8 +41,7 @@ for col in high_cardinality_columns:
     else:
         print(f"Warning: Column '{col}' not found in DataFrame.")
 
-# Now check the columns after encoding
-# print("Columns in DataFrame after encoding:", df.columns)
+
 
 # Label encoding for low-cardinality columns
 low_cardinality_columns = ['premis_desc', 'weapon_desc']
@@ -59,26 +58,17 @@ df['crm_cd_desc'] = label_encoder.fit_transform(df['crm_cd_desc'])
 df['vict_sex'] = label_encoder.fit_transform(df['vict_sex'])
 df['status'] = label_encoder.fit_transform(df['status'])
 
-# print("Columns in DataFrame before dropping:", df.columns)
-# Drop original non-numeric columns
+
 non_numeric_columns = df.select_dtypes(include=['object']).columns
 df = df.drop(columns=non_numeric_columns)
 
-# print("Columns in DataFrame after dropping:", df.columns)
+
 
 # Define features (X) and target (y)
 X = df.drop(columns=['crm_cd_desc'])
 y = df['crm_cd_desc']
 
-# # Debugging: Check for non-numeric columns
-# non_numeric_columns = df.select_dtypes(include=['object']).columns
-# print("Non-numeric columns in the dataset:")
-# print(non_numeric_columns)
-#
-# # Debugging: View only the columns with dtype 'object'
-# object_columns = X.select_dtypes(include=['object']).columns
-# print("Columns with dtype 'object':")
-# print(object_columns)
+
 
 # Split the data into training and test sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -90,17 +80,15 @@ X_train['age_missing'] = X_train['vict_age'].isnull().astype(int)
 X_train['vict_age'] = X_train['vict_age'].fillna(X_train['vict_age'].median())  # Or use the mean/advanced imputation
 
 print("Data preprocessing complete. Training and test sets are ready.")
-# Print only columns that have missing values (NaNs)
-# print(X_train.isnull().sum()[X_train.isnull().sum() > 0])
+
 
 # Step 2 -- Train a Machine Learning Model(Logistic Regression model)
 model = LogisticRegression(max_iter=1000, verbose=1)
 
-#
 # model.fit(X_train, y_train)
-#
+
 # y_pred = model.predict(X_test)
-#
+
 # accuracy = accuracy_score(y_test, y_pred)
 # print(f"Model Accuracy: {accuracy:.2f}")
 

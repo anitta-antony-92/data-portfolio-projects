@@ -1,0 +1,63 @@
+Difference between ml_model_training.py(not working due to huge data constraints - 1005000+) and ml_model_training_limit_1.py(50000 records)
+
+1. System Monitoring Integration:
+New Imports:
+
+Added the psutil library for monitoring system resources such as CPU, memory, and disk usage.
+Introduced time for tracking execution time.
+New Function:
+
+Added monitor_system_health() to check and print the system's health (CPU, memory, and disk usage) at various stages of the script execution.
+2. BigQuery Query Modification:
+Limited Rows:
+The dataset query now includes LIMIT 50000, restricting the number of rows pulled to 50,000 to prevent memory overload, which is a crucial change for handling large datasets.
+3. Preprocessing Enhancements:
+High-Cardinality Encoding:
+
+Refined frequency encoding for high-cardinality columns (mocodes, location, cross_street).
+After encoding, the original columns are dropped (via df = df.drop(columns=[col])), reducing memory usage.
+Label Encoding:
+
+Enhanced label encoding for low-cardinality columns (vict_sex, premis_desc, weapon_desc, status) with a conditional check to ensure columns are present before encoding.
+Original columns are dropped after encoding.
+One-Hot Encoding:
+
+One-hot encoding applied to categorical columns (area_name, vict_descent, status_desc) with drop_first=True to avoid multicollinearity.
+4. Memory Optimization:
+Optimizing Column Types:
+
+The vict_age column is converted to numeric and missing values are imputed with the median (fillna(df['vict_age'].median())).
+The crm_cd_desc column is cast to category type, optimizing memory usage for categorical data.
+Preprocessing Memory Usage Check:
+
+Added memory usage print statements before and after preprocessing to track the impact of changes on memory usage.
+5. Handling Missing Values:
+Target Variable (y):
+Missing values in the target (y) are filled with the mode (most frequent value) to avoid errors during model training.
+Feature Variables (X):
+Added missing value imputation using SimpleImputer (median strategy) for the feature variables (X) instead of just dropping rows with missing values.
+6. Model Training and Evaluation:
+Logistic Regression:
+
+The script trains a Logistic Regression model with max_iter=1000 and solver='liblinear'. The model's training time is measured, and accuracy is calculated and printed.
+Random Forest (commented out):
+
+A Random Forest model (RandomForestClassifier) is also set up but commented out. If enabled, this model would be trained and evaluated as an alternative to Logistic Regression.
+7. Total Runtime Measurement:
+Added tracking of the total runtime of the entire script by measuring the time from the start to the end of the execution.
+8. Monitoring System Health at Key Steps:
+Health Monitoring:
+The system's CPU, memory, and disk usage are monitored before and after key stages in the script:
+Before and after loading the data from BigQuery.
+After preprocessing steps.
+Before and after model training.
+After model evaluation.
+Summary of Key Changes:
+System Monitoring: Added psutil for system health monitoring.
+Dataset Handling: Limited data pulled from BigQuery to 50,000 rows.
+Efficient Preprocessing:
+Used encoding and imputation to optimize memory usage.
+Dropped original columns after encoding.
+Handling Missing Values: Applied imputation to both target (y) and features (X).
+Modeling Adjustments: Introduced LogisticRegression and included an optional RandomForestClassifier.
+Runtime Tracking: Added tracking for the total runtime of the script.

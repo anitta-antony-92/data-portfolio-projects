@@ -1,0 +1,39 @@
+C:\Users\Anitta\data-portfolio-projects\la-crime-analysis\src\.venv\Scripts\python.exe C:\Users\Anitta\data-portfolio-projects\la-crime-analysis\src\ml_model_training_limit.py 
+System Health Before Query Execution:
+CPU Usage: 7.0%
+Memory Usage: 9.20 GB / 15.79 GB
+Disk Usage: 261.45 GB / 324.71 GB
+----------------------------------------
+Time taken to load data: 5.76 seconds
+System Health After Loading Data:
+CPU Usage: 12.4%
+Memory Usage: 9.25 GB / 15.79 GB
+Disk Usage: 261.45 GB / 324.71 GB
+----------------------------------------
+Initial memory usage: 38.89556312561035 MB
+System Health After Preprocessing:
+CPU Usage: 13.0%
+Memory Usage: 9.22 GB / 15.79 GB
+Disk Usage: 261.45 GB / 324.71 GB
+----------------------------------------
+Post-processing memory usage: 11.83871841430664 MB
+System Health Before Model Training:
+CPU Usage: 8.7%
+Memory Usage: 9.25 GB / 15.79 GB
+Disk Usage: 261.45 GB / 324.71 GB
+----------------------------------------
+Time taken to train Logistic Regression: 811.59 seconds
+Accuracy: 0.64
+System Health After Model Training:
+CPU Usage: 8.8%
+Memory Usage: 9.20 GB / 15.79 GB
+Disk Usage: 261.44 GB / 324.71 GB
+----------------------------------------
+Total Runtime: 823.12 seconds
+
+Process finished with exit code 0
+
+
+<This output is for 50000 records.>
+<X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)>
+<model = LogisticRegression(max_iter=1000, solver='liblinear')>

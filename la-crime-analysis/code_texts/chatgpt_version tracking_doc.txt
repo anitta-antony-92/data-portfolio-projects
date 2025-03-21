@@ -1,0 +1,612 @@
+You said:
+following is the first version of my script -- which i couldnt run fully because of huge data. i will give next versions of my script and provide me change tracker in detail on modifications 
+
+from google.cloud import bigquery
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import GridSearchCV
+import os
+
+
+
+# Set the environment variable for Google Cloud credentials
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r"C:\Users\Anitta\Desktop\Data_Projects\la-crime-analysis-92d8c07454af.json"
+
+# Initialize a BigQuery client
+client = bigquery.Client()
+
+query = """
+SELECT * FROM la-crime-analysis.la_crime_dataset.crime_data
+"""
+
+df = client.query(query).to_dataframe()
+
+# Step 1 -- Data Preprocessing (Feature Engineering)
+
+# Drop unnecessary columns
+df = df.drop(columns=['dr_no', 'date_occ', 'date_rptd'])
+df = df.drop_duplicates()
+
+# Frequency encoding for high-cardinality columns
+high_cardinality_columns = ['mocodes', 'location', 'cross_street']
+
+# print("Columns in DataFrame before encoding:", df.columns)
+
+for col in high_cardinality_columns:
+    if col in df.columns:  # Check if column exists
+        frequency_encoding = df[col].value_counts(normalize=True)
+        df[f'{col}_encoded'] = df[col].map(frequency_encoding)
+        df[f'{col}_encoded'] = df[f'{col}_encoded'].fillna(0)
+    else:
+        print(f"Warning: Column '{col}' not found in DataFrame.")
+
+
+
+# Label encoding for low-cardinality columns
+low_cardinality_columns = ['premis_desc', 'weapon_desc']
+label_encoder = LabelEncoder()
+for col in low_cardinality_columns:
+    df[f'{col}_encoded'] = label_encoder.fit_transform(df[col])
+
+# One-hot encoding for categorical columns
+df = pd.get_dummies(df, columns=['area_name', 'vict_descent', 'status_desc'])
+
+# Label encoding for categorical columns
+label_encoder = LabelEncoder()
+df['crm_cd_desc'] = label_encoder.fit_transform(df['crm_cd_desc'])
+df['vict_sex'] = label_encoder.fit_transform(df['vict_sex'])
+df['status'] = label_encoder.fit_transform(df['status'])
+
+
+non_numeric_columns = df.select_dtypes(include=['object']).columns
+df = df.drop(columns=non_numeric_columns)
+
+
+
+# Define features (X) and target (y)
+X = df.drop(columns=['crm_cd_desc'])
+y = df['crm_cd_desc']
+
+
+
+# Split the data into training and test sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+X_train['crm_cd_1'] = X_train['crm_cd_2'].fillna(0)
+X_train['crm_cd_2'] = X_train['crm_cd_2'].fillna(0)
+X_train['crm_cd_3'] = X_train['crm_cd_3'].fillna(0)
+X_train['crm_cd_4'] = X_train['crm_cd_4'].fillna(0)
+X_train['age_missing'] = X_train['vict_age'].isnull().astype(int)
+X_train['vict_age'] = X_train['vict_age'].fillna(X_train['vict_age'].median())  # Or use the mean/advanced imputation
+
+print("Data preprocessing complete. Training and test sets are ready.")
+
+
+# Step 2 -- Train a Machine Learning Model(Logistic Regression model)
+model = LogisticRegression(max_iter=1000, verbose=1)
+
+# model.fit(X_train, y_train)
+
+# y_pred = model.predict(X_test)
+
+# accuracy = accuracy_score(y_test, y_pred)
+# print(f"Model Accuracy: {accuracy:.2f}")
+
+import time
+start_time = time.time()
+
+# Train the model
+model.fit(X_train, y_train)
+
+# Make predictions
+y_pred = model.predict(X_test)
+
+end_time = time.time()
+print(f"Total time taken: {end_time - start_time:.2f} seconds")
+ChatGPT said:
+Thank you for providing the first version of your script. Based on this, I can track the changes in subsequent versions you provide. I'll break down the initial version of your script and include key steps and structures that you might modify later.
+
+First Version of Your Script Breakdown:
+Google Cloud Integration:
+
+You set the environment variable for Google Cloud credentials and initialized the BigQuery client to fetch the dataset.
+BigQuery Data Extraction:
+
+You retrieved a dataset from Google BigQuery using SQL (crime_data table) and loaded it into a pandas DataFrame.
+Data Preprocessing:
+
+Removed unnecessary columns: dr_no, date_occ, and date_rptd.
+Dropped duplicates from the dataset.
+Applied frequency encoding to high-cardinality columns: mocodes, location, cross_street.
+Applied label encoding to low-cardinality columns: premis_desc, weapon_desc.
+Performed one-hot encoding for categorical columns: area_name, vict_descent, status_desc.
+Applied label encoding to categorical columns: crm_cd_desc, vict_sex, status.
+Removed non-numeric columns from the DataFrame.
+Feature and Target Definition:
+
+Defined X (features) and y (target) for training.
+Split data into training and test sets.
+Data Imputation and Feature Engineering:
+
+Applied manual feature engineering for missing values and filling in gaps in the training data (crm_cd_1, crm_cd_2, crm_cd_3, crm_cd_4, and vict_age).
+Model Training (Logistic Regression):
+
+Initialized the LogisticRegression model with max_iter=1000 and verbosity set to 1.
+The training process was executed (though model training was commented out in the first version).
+Time Measurement:
+
+Measured and printed the time taken to train the model using the time module.
+Next Steps for Change Tracking:
+As you share updated versions of your script, I'll help you track the following types of changes:
+
+Data Processing Adjustments: Changes in preprocessing steps such as different encoding methods, handling missing values, or feature engineering.
+Modeling Changes: If you decide to switch models (e.g., RandomForest, XGBoost), adjust hyperparameters, or change the model's settings.
+Evaluation Metrics: If you modify how model performance is measured or add more metrics.
+Performance Optimization: If you're trying to optimize for larger datasets, I'll look for changes related to scaling, parallel processing, or memory management.
+Data Handling for Big Data: Any approach to handling large datasets more efficiently (e.g., batch processing, data chunking).
+Please share the next version of your script when you're ready, and I will provide detailed change tracking based on the modifications.
+
+
+You said:
+i dont need code explanations . 
+
+import pandas as pd
+from google.cloud import bigquery
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.impute import SimpleImputer  # For handling missing values
+import os
+import psutil  # For system monitoring
+import time  # For tracking execution time
+
+# Function to monitor system health
+def monitor_system_health():
+    cpu_usage = psutil.cpu_percent(interval=1)  # CPU usage as a percentage
+    memory_info = psutil.virtual_memory()  # Memory usage in bytes
+    disk_usage = psutil.disk_usage('/')  # Disk usage for the root directory
+    print(f"CPU Usage: {cpu_usage}%")
+    print(f"Memory Usage: {memory_info.used / (1024 ** 3):.2f} GB / {memory_info.total / (1024 ** 3):.2f} GB")
+    print(f"Disk Usage: {disk_usage.used / (1024 ** 3):.2f} GB / {disk_usage.total / (1024 ** 3):.2f} GB")
+    print("-" * 40)
+
+# Start tracking total runtime
+total_start_time = time.time()
+
+# Set the environment variable for Google Cloud credentials
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r"C:\Users\Anitta\Desktop\Data_Projects\la-crime-analysis-92d8c07454af.json"
+
+# Initialize a BigQuery client
+client = bigquery.Client()
+
+# Your BigQuery query
+query = """
+SELECT * FROM la-crime-analysis.la_crime_dataset.crime_data
+LIMIT 50000  # Limiting the dataset to 50,000 rows to avoid memory overload
+"""
+
+# Monitor system health before running the query
+print("System Health Before Query Execution:")
+monitor_system_health()
+
+# Run the query and convert the results into a pandas dataframe
+start_time = time.time()
+df = client.query(query).to_dataframe()
+print(f"Time taken to load data: {time.time() - start_time:.2f} seconds")
+
+# Monitor system health after loading data
+print("System Health After Loading Data:")
+monitor_system_health()
+
+# Check the initial memory usage of the DataFrame
+print("Initial memory usage:", df.memory_usage(deep=True).sum() / (1024 ** 2), "MB")
+
+# Drop unnecessary columns
+df = df.drop(columns=['dr_no', 'date_occ', 'date_rptd'])
+df = df.drop_duplicates()
+
+# Efficient Encoding for high-cardinality columns (Frequency Encoding)
+high_cardinality_columns = ['mocodes', 'location', 'cross_street']
+for col in high_cardinality_columns:
+    if col in df.columns:
+        frequency_encoding = df[col].value_counts(normalize=True)
+        df[f'{col}_encoded'] = df[col].map(frequency_encoding).fillna(0)
+        df = df.drop(columns=[col])
+
+# Efficient Label Encoding for low-cardinality columns
+low_cardinality_columns = ['vict_sex', 'premis_desc', 'weapon_desc', 'status']
+label_encoder = LabelEncoder()
+for col in low_cardinality_columns:
+    if col in df.columns:
+        df[f'{col}_encoded'] = label_encoder.fit_transform(df[col])
+        df = df.drop(columns=[col])
+
+# One-hot encoding for categorical columns (with drop_first=True to avoid collinearity)
+df = pd.get_dummies(df, columns=['area_name', 'vict_descent', 'status_desc'], drop_first=True)
+
+# Optimize column types for memory usage
+df['vict_age'] = pd.to_numeric(df['vict_age'], errors='coerce').fillna(df['vict_age'].median())
+df['crm_cd_desc'] = df['crm_cd_desc'].astype('category')
+
+# Monitor system health after preprocessing
+print("System Health After Preprocessing:")
+monitor_system_health()
+
+# Define features (X) and target (y)
+X = df.drop(columns=['crm_cd_desc'])
+y = df['crm_cd_desc']
+
+# Handle missing values (if any) in the target variable as well
+y = y.fillna(y.mode()[0])  # Filling missing target values with the most frequent class
+
+# Handle missing values in X
+# Option 1: Drop rows with missing values
+# X = X.dropna()
+
+# Option 2: Impute missing values (recommended)
+imputer = SimpleImputer(strategy='median')  # Use median for numerical columns
+X = pd.DataFrame(imputer.fit_transform(X), columns=X.columns)
+
+# Split the data into training and test sets (80% train, 20% test)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+print("Number of features after preprocessing:", X_train.shape[1])
+# Check memory usage after preprocessing
+print("Post-processing memory usage:", df.memory_usage(deep=True).sum() / (1024 ** 2), "MB")
+
+# Monitor system health before model training
+print("System Health Before Model Training:")
+monitor_system_health()
+
+# Example: Logistic Regression Model
+start_time = time.time()
+model = LogisticRegression(max_iter=1000, solver='liblinear')
+model.fit(X_train, y_train)
+print(f"Time taken to train Logistic Regression: {time.time() - start_time:.2f} seconds")
+
+# Predict on the test data
+y_pred = model.predict(X_test)
+
+# Evaluate the model
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Accuracy: {accuracy:.2f}")
+
+# Monitor system health after model training
+print("System Health After Model Training:")
+monitor_system_health()
+
+# # Optionally, use Random Forest for better performance on classification tasks
+# start_time = time.time()
+# rf_model = RandomForestClassifier(n_estimators=100, random_state=42, n_jobs=-1)
+# rf_model.fit(X_train, y_train)
+# print(f"Time taken to train Random Forest: {time.time() - start_time:.2f} seconds")
+#
+# # Predict with Random Forest
+# y_pred_rf = rf_model.predict(X_test)
+#
+# # Evaluate Random Forest model
+# accuracy_rf = accuracy_score(y_test, y_pred_rf)
+# print(f"Random Forest Accuracy: {accuracy_rf:.2f}")
+#
+# # Monitor system health after Random Forest training
+# print("System Health After Random Forest Training:")
+# monitor_system_health()
+
+# Calculate and print total runtime
+total_runtime = time.time() - total_start_time
+print(f"Total Runtime: {total_runtime:.2f} seconds")
+ChatGPT said:
+Change Tracker: Version 2 of Your Script
+Here is a detailed breakdown of the changes introduced in Version 2 compared to the first version of your script:
+
+1. System Monitoring Integration:
+New Imports:
+
+Added the psutil library for monitoring system resources such as CPU, memory, and disk usage.
+Introduced time for tracking execution time.
+New Function:
+
+Added monitor_system_health() to check and print the system's health (CPU, memory, and disk usage) at various stages of the script execution.
+2. BigQuery Query Modification:
+Limited Rows:
+The dataset query now includes LIMIT 50000, restricting the number of rows pulled to 50,000 to prevent memory overload, which is a crucial change for handling large datasets.
+3. Preprocessing Enhancements:
+High-Cardinality Encoding:
+
+Refined frequency encoding for high-cardinality columns (mocodes, location, cross_street).
+After encoding, the original columns are dropped (via df = df.drop(columns=[col])), reducing memory usage.
+Label Encoding:
+
+Enhanced label encoding for low-cardinality columns (vict_sex, premis_desc, weapon_desc, status) with a conditional check to ensure columns are present before encoding.
+Original columns are dropped after encoding.
+One-Hot Encoding:
+
+One-hot encoding applied to categorical columns (area_name, vict_descent, status_desc) with drop_first=True to avoid multicollinearity.
+4. Memory Optimization:
+Optimizing Column Types:
+
+The vict_age column is converted to numeric and missing values are imputed with the median (fillna(df['vict_age'].median())).
+The crm_cd_desc column is cast to category type, optimizing memory usage for categorical data.
+Preprocessing Memory Usage Check:
+
+Added memory usage print statements before and after preprocessing to track the impact of changes on memory usage.
+5. Handling Missing Values:
+Target Variable (y):
+Missing values in the target (y) are filled with the mode (most frequent value) to avoid errors during model training.
+Feature Variables (X):
+Added missing value imputation using SimpleImputer (median strategy) for the feature variables (X) instead of just dropping rows with missing values.
+6. Model Training and Evaluation:
+Logistic Regression:
+
+The script trains a Logistic Regression model with max_iter=1000 and solver='liblinear'. The model's training time is measured, and accuracy is calculated and printed.
+Random Forest (commented out):
+
+A Random Forest model (RandomForestClassifier) is also set up but commented out. If enabled, this model would be trained and evaluated as an alternative to Logistic Regression.
+7. Total Runtime Measurement:
+Added tracking of the total runtime of the entire script by measuring the time from the start to the end of the execution.
+8. Monitoring System Health at Key Steps:
+Health Monitoring:
+The system's CPU, memory, and disk usage are monitored before and after key stages in the script:
+Before and after loading the data from BigQuery.
+After preprocessing steps.
+Before and after model training.
+After model evaluation.
+Summary of Key Changes:
+System Monitoring: Added psutil for system health monitoring.
+Dataset Handling: Limited data pulled from BigQuery to 50,000 rows.
+Efficient Preprocessing:
+Used encoding and imputation to optimize memory usage.
+Dropped original columns after encoding.
+Handling Missing Values: Applied imputation to both target (y) and features (X).
+Modeling Adjustments: Introduced LogisticRegression and included an optional RandomForestClassifier.
+Runtime Tracking: Added tracking for the total runtime of the script.
+If you're ready to share the next version, I will continue to track these changes in detail.
+
+
+You said:
+import pandas as pd
+from google.cloud import bigquery
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, classification_report
+from sklearn.impute import SimpleImputer
+from sklearn.feature_selection import VarianceThreshold
+from sklearn.decomposition import PCA
+import os
+import psutil
+import time
+
+# Function to monitor system health
+def monitor_system_health():
+    cpu_usage = psutil.cpu_percent(interval=1)
+    memory_info = psutil.virtual_memory()
+    disk_usage = psutil.disk_usage('/')
+    print(f"CPU Usage: {cpu_usage}%")
+    print(f"Memory Usage: {memory_info.used / (1024 ** 3):.2f} GB / {memory_info.total / (1024 ** 3):.2f} GB")
+    print(f"Disk Usage: {disk_usage.used / (1024 ** 3):.2f} GB / {disk_usage.total / (1024 ** 3):.2f} GB")
+    print("-" * 40)
+
+# Start tracking total runtime
+total_start_time = time.time()
+
+# Set the environment variable for Google Cloud credentials
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r"C:\Users\Anitta\Desktop\Data_Projects\la-crime-analysis-92d8c07454af.json"
+
+# Initialize a BigQuery client
+client = bigquery.Client()
+
+# Your BigQuery query
+query = """
+SELECT * FROM la-crime-analysis.la_crime_dataset.crime_data
+LIMIT 50000
+"""
+
+# Monitor system health before running the query
+print("System Health Before Query Execution:")
+monitor_system_health()
+
+# Run the query and convert the results into a pandas dataframe
+start_time = time.time()
+df = client.query(query).to_dataframe()
+print(f"Time taken to load data: {time.time() - start_time:.2f} seconds")
+
+# Monitor system health after loading data
+print("System Health After Loading Data:")
+monitor_system_health()
+
+# Check the initial memory usage of the DataFrame
+print("Initial memory usage:", df.memory_usage(deep=True).sum() / (1024 ** 2), "MB")
+
+# Drop unnecessary columns
+df = df.drop(columns=['dr_no', 'date_occ', 'date_rptd'])
+df = df.drop_duplicates()
+
+# Efficient Encoding for high-cardinality columns (Frequency Encoding)
+high_cardinality_columns = ['mocodes', 'location', 'cross_street']
+for col in high_cardinality_columns:
+    if col in df.columns:
+        frequency_encoding = df[col].value_counts(normalize=True)
+        df[f'{col}_encoded'] = df[col].map(frequency_encoding).fillna(0)
+        df = df.drop(columns=[col])
+
+# Efficient Label Encoding for low-cardinality columns
+low_cardinality_columns = ['vict_sex', 'premis_desc', 'weapon_desc', 'status']
+label_encoder = LabelEncoder()
+for col in low_cardinality_columns:
+    if col in df.columns:
+        df[f'{col}_encoded'] = label_encoder.fit_transform(df[col])
+        df = df.drop(columns=[col])
+
+# One-hot encoding for categorical columns (with drop_first=True to avoid collinearity)
+df = pd.get_dummies(df, columns=['area_name', 'vict_descent', 'status_desc'], drop_first=True)
+
+# Optimize column types for memory usage
+df['vict_age'] = pd.to_numeric(df['vict_age'], errors='coerce').fillna(df['vict_age'].median())
+df['crm_cd_desc'] = df['crm_cd_desc'].astype('category')
+
+# Monitor system health after preprocessing
+print("System Health After Preprocessing:")
+monitor_system_health()
+
+# Define features (X) and target (y)
+X = df.drop(columns=['crm_cd_desc'])
+y = df['crm_cd_desc']
+
+# Handle missing values (if any) in the target variable as well
+y = y.fillna(y.mode()[0])
+
+# Handle missing values in X
+imputer = SimpleImputer(strategy='median')
+X = pd.DataFrame(imputer.fit_transform(X), columns=X.columns)
+
+# Remove constant features
+constant_filter = VarianceThreshold(threshold=0)
+X = constant_filter.fit_transform(X)
+
+# Feature Scaling
+scaler = StandardScaler()
+X = scaler.fit_transform(X)
+
+# Dimensionality Reduction using PCA
+pca = PCA(n_components=20)  # Reduce to 20 components
+X = pca.fit_transform(X)
+
+# Split the data into training and test sets (80% train, 20% test)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+print("Number of features after preprocessing and selection:", X_train.shape[1])
+
+# Check memory usage after preprocessing
+print("Post-processing memory usage:", df.memory_usage(deep=True).sum() / (1024 ** 2), "MB")
+
+# Monitor system health before model training
+print("System Health Before Model Training:")
+monitor_system_health()
+
+# Print class distribution
+print("Class Distribution in y_train:")
+print(y_train.value_counts())
+
+print("Class Distribution in y_test:")
+print(y_test.value_counts())
+
+# Fit LabelEncoder on the entire target column (y) to ensure it knows all possible classes
+label_encoder.fit(y)
+
+# Encode y_train and y_test using the fitted LabelEncoder
+y_train_encoded = label_encoder.transform(y_train)
+y_test_encoded = label_encoder.transform(y_test)
+
+# Example: Random Forest Model
+start_time = time.time()
+rf_model = RandomForestClassifier(n_estimators=100, random_state=42, n_jobs=-1)
+rf_model.fit(X_train, y_train_encoded)
+print(f"Time taken to train Random Forest: {time.time() - start_time:.2f} seconds")
+
+# Predict on the test data
+y_pred_encoded = rf_model.predict(X_test)
+
+# Decode the predicted labels back to original class names
+y_pred = label_encoder.inverse_transform(y_pred_encoded)
+
+# Evaluate the model
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Accuracy: {accuracy:.2f}")
+
+# Generate a classification report
+print("Classification Report:")
+print(classification_report(y_test, y_pred, zero_division=0))
+
+# Monitor system health after model training
+print("System Health After Model Training:")
+monitor_system_health()
+
+# Calculate and print total runtime
+total_runtime = time.time() - total_start_time
+print(f"Total Runtime: {total_runtime:.2f} seconds")
+ChatGPT said:
+Change Tracker: Version 3 of Your Script
+Here’s a detailed breakdown of the changes in Version 3 compared to Version 2 of your script:
+
+1. New Libraries Added:
+Imports:
+StandardScaler from sklearn.preprocessing: For feature scaling (normalizing the data).
+VarianceThreshold from sklearn.feature_selection: For removing constant features with zero variance.
+PCA from sklearn.decomposition: For dimensionality reduction to reduce the number of features.
+2. Data Preprocessing Enhancements:
+Variance Threshold (Feature Selection):
+
+Introduced VarianceThreshold to remove features with constant values (zero variance). This helps eliminate redundant features from the dataset that do not contribute to the model.
+Applied this filter on X before feature scaling.
+Feature Scaling:
+
+Added StandardScaler to standardize the features by scaling them to zero mean and unit variance. This is particularly useful for algorithms that are sensitive to feature scaling.
+Dimensionality Reduction:
+
+Applied Principal Component Analysis (PCA) to reduce the number of features in X to 20 components. PCA is a technique used for dimensionality reduction by transforming features into orthogonal components that explain the variance in the data.
+3. Encoding Adjustments:
+LabelEncoder for Target (y):
+LabelEncoder is now fit on the entire target (y) column before training the model. This ensures that all possible classes are captured.
+After encoding, both y_train and y_test are transformed using the fitted encoder.
+During prediction, the labels are decoded back to their original class names using inverse_transform.
+4. Random Forest Model:
+Model:
+The script now trains a RandomForestClassifier with n_estimators=100, random_state=42, and n_jobs=-1 for parallel processing (using all available CPU cores).
+The training time for Random Forest is now tracked.
+Prediction and Evaluation:
+After fitting the model, predictions are made on the test set (X_test), and the model's accuracy is evaluated.
+The classification report is printed using classification_report, which provides detailed metrics such as precision, recall, and F1-score, in addition to accuracy.
+5. System Health Monitoring:
+System Health Checks:
+System health is now monitored more frequently during key stages of the script, especially before and after preprocessing and model training.
+6. Print Class Distribution:
+Before training the model, the distribution of classes in y_train and y_test is printed. This helps understand the balance of the target variable and check if class imbalances exist, which could impact the model's performance.
+7. Improved Memory and Execution Time Reporting:
+After feature selection, scaling, and PCA, the memory usage is printed again to monitor the impact of these transformations on the dataset size.
+The total runtime of the entire script is tracked and printed at the end.
+Summary of Key Changes:
+Feature Selection:
+
+Applied VarianceThreshold to remove constant features.
+Feature Scaling:
+
+Introduced StandardScaler to normalize features.
+Dimensionality Reduction:
+
+Applied PCA to reduce the dataset to 20 components.
+Label Encoding:
+
+Fit the LabelEncoder on the entire target column (y), and transformed both y_train and y_test accordingly.
+Added decoding step for predicted labels.
+Random Forest Model:
+
+Trained a RandomForestClassifier and evaluated it using accuracy and classification report.
+Class Distribution Reporting:
+
+Printed the class distribution for y_train and y_test before model training.
+System Health Monitoring:
+
+More frequent checks on system health before and after major steps (e.g., data loading, preprocessing, and model training).
+If you're ready to share the next version, I will continue tracking these modifications in detail.
+
+
+Get smarter responses, upload files and images, and more.
+
+Log in
+
+Sign up for free
+
+
+Attach
+
+Search
+
+Reason
+
+Voice
+ChatGPT can make mistakes. Check important info.
+?
