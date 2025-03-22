@@ -1,0 +1,49 @@
+2025-03-22 23:02:00,266 - INFO - Process Start Time: Sat Mar 22 23:02:00 2025
+2025-03-22 23:02:00,266 - DEBUG - Checking C:\Users\Anitta\Desktop\Data_Projects\la-crime-analysis-92d8c07454af.json for explicit credentials as part of auth process...
+2025-03-22 23:02:00,273 - DEBUG - Checking C:\Users\Anitta\Desktop\Data_Projects\la-crime-analysis-92d8c07454af.json for explicit credentials as part of auth process...
+2025-03-22 23:02:00,274 - INFO - Running BigQuery query to load data...
+2025-03-22 23:02:00,275 - DEBUG - This service is instrumented using OpenTelemetry. OpenTelemetry or one of its components could not be imported; please add compatible versions of opentelemetry-api and opentelemetry-instrumentation packages in order to get BigQuery Tracing data.
+2025-03-22 23:02:00,276 - DEBUG - Converted retries value: 3 -> Retry(total=3, connect=None, read=None, redirect=None, status=None)
+2025-03-22 23:02:00,304 - DEBUG - Making request: POST https://oauth2.googleapis.com/token
+2025-03-22 23:02:00,307 - DEBUG - Starting new HTTPS connection (1): oauth2.googleapis.com:443
+2025-03-22 23:02:00,744 - DEBUG - https://oauth2.googleapis.com:443 "POST /token HTTP/1.1" 200 None
+2025-03-22 23:02:00,747 - DEBUG - Starting new HTTPS connection (1): bigquery.googleapis.com:443
+2025-03-22 23:02:03,201 - DEBUG - https://bigquery.googleapis.com:443 "POST /bigquery/v2/projects/la-crime-analysis/jobs?prettyPrint=false HTTP/1.1" 200 None
+2025-03-22 23:02:03,610 - DEBUG - https://bigquery.googleapis.com:443 "GET /bigquery/v2/projects/la-crime-analysis/jobs/f998af31-9278-4854-9883-fe2aa347b5c4?projection=full&location=US&prettyPrint=false HTTP/1.1" 200 None
+2025-03-22 23:02:04,224 - DEBUG - https://bigquery.googleapis.com:443 "GET /bigquery/v2/projects/la-crime-analysis/queries/f998af31-9278-4854-9883-fe2aa347b5c4?maxResults=0&location=US&prettyPrint=false HTTP/1.1" 200 None
+2025-03-22 23:02:04,639 - DEBUG - https://bigquery.googleapis.com:443 "GET /bigquery/v2/projects/la-crime-analysis/jobs/f998af31-9278-4854-9883-fe2aa347b5c4?projection=full&location=US&prettyPrint=false HTTP/1.1" 200 None
+2025-03-22 23:02:08,213 - INFO - Time taken to load data: 7.94 seconds
+2025-03-22 23:02:08,234 - INFO - Data sample (first 5 rows):
+       dr_no                 date_rptd  ... month  area_name_encoded
+0  231409970 2023-05-08 00:00:00+00:00  ...     5         488.448089
+1  211421871 2021-11-21 00:00:00+00:00  ...    11         488.448089
+2  221407164 2022-02-25 00:00:00+00:00  ...     1         488.448089
+3  211407653 2021-03-05 00:00:00+00:00  ...     3         488.448089
+4  211415827 2021-07-28 00:00:00+00:00  ...     7         488.448089
+
+[5 rows x 32 columns]
+2025-03-22 23:02:08,249 - INFO - Dropping unnecessary columns and removing duplicates...
+2025-03-22 23:02:08,311 - INFO - Applying frequency encoding on column: mocodes
+2025-03-22 23:02:08,328 - INFO - Applying frequency encoding on column: location
+2025-03-22 23:02:08,352 - INFO - Applying frequency encoding on column: cross_street
+2025-03-22 23:02:08,363 - INFO - Applying label encoding on column: vict_sex
+2025-03-22 23:02:08,378 - INFO - Applying label encoding on column: premis_desc
+2025-03-22 23:02:08,392 - INFO - Applying label encoding on column: weapon_desc
+2025-03-22 23:02:08,407 - INFO - Applying label encoding on column: status
+2025-03-22 23:02:08,418 - INFO - Applying one-hot encoding for categorical columns...
+2025-03-22 23:02:08,446 - INFO - Optimizing column types for memory usage...
+2025-03-22 23:02:08,465 - INFO - Data info after preprocessing:
+None
+2025-03-22 23:02:08,474 - INFO - Defining features (X) and target (y)...
+2025-03-22 23:02:08,480 - INFO - Feature columns: ['time_occ', 'area', 'rpt_dist_no', 'part_1_2', 'crm_cd', 'vict_age', 'premis_cd', 'weapon_used_cd', 'crm_cd_1', 'crm_cd_2', 'crm_cd_3', 'crm_cd_4', 'lat', 'lon', 'hour_of_day', 'day_of_week', 'month', 'area_name_encoded', 'mocodes_encoded', 'location_encoded', 'cross_street_encoded', 'vict_sex_encoded', 'premis_desc_encoded', 'weapon_desc_encoded', 'status_encoded', 'area_name_Central', 'area_name_Devonshire', 'area_name_Newton', 'area_name_Pacific', 'area_name_Southeast', 'area_name_Topanga', 'area_name_Van Nuys', 'area_name_West LA', 'area_name_Wilshire', 'vict_descent_B', 'vict_descent_C', 'vict_descent_D', 'vict_descent_F', 'vict_descent_G', 'vict_descent_H', 'vict_descent_I', 'vict_descent_J', 'vict_descent_K', 'vict_descent_L', 'vict_descent_O', 'vict_descent_P', 'vict_descent_S', 'vict_descent_U', 'vict_descent_Unknown', 'vict_descent_V', 'vict_descent_W', 'vict_descent_X', 'vict_descent_Z', 'status_desc_Adult Other', 'status_desc_Invest Cont', 'status_desc_Juv Arrest', 'status_desc_Juv Other', 'status_desc_UNK']
+2025-03-22 23:02:08,481 - INFO - Handling missing values in the target variable...
+2025-03-22 23:02:08,481 - INFO - Handling missing values in features with median imputation...
+2025-03-22 23:02:08,801 - INFO - Splitting data into training and test sets...
+2025-03-22 23:02:08,819 - INFO - Number of features after preprocessing: 58
+2025-03-22 23:02:08,819 - INFO - Training set shape: (39997, 58), Test set shape: (10000, 58)
+2025-03-22 23:02:08,819 - INFO - Training Logistic Regression model...
+2025-03-22 23:13:12,114 - INFO - Time taken to train Logistic Regression: 663.29 seconds
+2025-03-22 23:13:12,114 - INFO - Predicting on the test data...
+2025-03-22 23:13:12,129 - INFO - Model accuracy: 0.63
+2025-03-22 23:13:12,129 - INFO - Process End Time: Sat Mar 22 23:13:12 2025
+2025-03-22 23:13:12,129 - INFO - Total Runtime: 671.86 seconds
