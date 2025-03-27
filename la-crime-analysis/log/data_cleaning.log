@@ -48,3 +48,8 @@
 2025-03-16 03:31:09,002 - INFO - Cleaned data saved successfully to C:\Users\Anitta\data-portfolio-projects\la-crime-analysis\data\processed_data\pre_cleaned_crime_data.parquet.
 2025-03-16 03:31:09,002 - INFO - Data cleaning completed: 100% completed.
 2025-03-16 03:31:09,002 - INFO - Total elapsed time: 0:37:37.
+2025-03-27 02:23:41,787 - INFO - Dataset loaded successfully.
+2025-03-27 02:23:41,790 - INFO - Total records in the dataset: 99998
+2025-03-27 02:23:41,790 - INFO - Handling missing values...
+2025-03-27 02:23:41,797 - INFO - Missing categorical values handled successfully.
+2025-03-27 02:23:41,797 - INFO - Imputing missing numerical values using KNN imputer...
