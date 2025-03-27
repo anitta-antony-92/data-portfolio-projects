@@ -123,7 +123,7 @@ la-crime-analysis/
 
 ## Steps
 1. Clone this repository.
-2. Make sure necessary libraries are installed.
+2. Make sure necessary libraries are installed. [`pip install -r requirements.txt`]
 3. Fetch Crime Data [`download_data.py`](src/download_data.py)
 4. Clean and Transform Data [`data_preprocessing_before_bigquery.py`](src/data_preprocessing_before_bigquery.py).
 5. Store Processed Data in BigQuery  [`upload_to_bigquery.py`](src/upload_to_bigquery.py)
