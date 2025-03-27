@@ -1,4 +1,4 @@
-# Los Angeles Crime Data Analysis & Prediction
+# Los Angeles Crime Data Analysis
 
 **Author:** Anitta Antony  
 **Repository:** [GitHub - LA Crime Analysis](https://github.com/anitta-antony-92/data-portfolio-projects/tree/main/la-crime-analysis)  
@@ -6,16 +6,16 @@
 ---
 
 ## 📌 Project Overview
-This project analyzes crime trends in Los Angeles using publicly available crime data. The primary objective is to demonstrate expertise in **data engineering, analytics, visualization, and predictive modeling**. The analysis provides insights into crime distribution across time and location, helping identify high-risk areas and trends.
+This project analyzes crime trends in Los Angeles using publicly available crime data. The primary objective is to demonstrate expertise in **data engineering, analytics, visualization, and model training**. The analysis provides insights into crime distribution across time and location, helping identify high-risk areas and trends.
 
 ### **Key Features:**
 - **Data Collection & Preprocessing**: Extract, clean, and transform raw crime data.
 - **Database Integration**: Store and query processed data efficiently.
 - **Exploratory Data Analysis (EDA)**: Identify patterns, trends, and correlations.
-- **Machine Learning Model**: Predict crime occurrences based on historical data.
+- **Machine Learning Model**: Attempting Machine Learning for the first time.
 - **Visualization & Reporting**: Generate interactive dashboards using **Tableau**.
 
-This project is part of my **data portfolio**, aimed at demonstrating end-to-end data analysis and predictive modeling workflows.
+This project is part of my **data portfolio**, aimed at demonstrating end-to-end data analysis and  modeling workflows.
 
 ---
 
@@ -113,62 +113,30 @@ la-crime-analysis/
 1. **Data Collection**: Crime data is sourced from the [LA Open Data Portal](https://data.lacity.org/Public-Safety/Crime-Data-from-2020-to-Present/).
 2. **Data Preprocessing**: The dataset undergoes cleaning and transformation using Pandas and Polars.
 3. **Exploratory Data Analysis**: Identify trends, seasonal patterns, and crime hotspots.
-4. **Machine Learning Model**: A predictive model is trained to forecast crime occurrences.
+4. **Machine Learning Model**: A model is trained to analyze crime types.
 5. **Database Integration**: Processed data is stored in **Google BigQuery** for analysis.
-6. **Visualization & Reporting**: Insights are presented via **Tableau dashboards**.
+6. **Visualization & Reporting**: Insights on model efficiency are presented via **Tableau dashboards**.
 
 ---
 
-## 🔢 Key Insights & Results  
-✔️ **Tableau dashboard** provides interactive crime analysis visualization.  
+### Prerequisites
+- **Python**: Install Python 3.x.
+- **Google Cloud BigQuery**:  Create an account in oogle Cloud BigQuery (Free Tier).
+- **Libraries**: Install the required Python libraries:
 
----
-
-## 🚀 How to Run the Project
-### **Prerequisites**
-- Python 3.x installed
-- Virtual environment (recommended)
-- Google Cloud BigQuery account (Free Tier)
-- Tableau Public installed (for dashboard visualization)
-
-### **Steps to Run**
-1. **Clone the Repository**
-   ```bash
-   git clone https://github.com/anitta-antony-92/data-portfolio-projects.git
-   cd data-portfolio-projects/la-crime-analysis
-   ```
-2. **Fetch Crime Data**
-   ```bash
-   python src/ingestion/fetch_data.py
-   ```
-3. **Clean and Transform Data**
-   ```bash
-   python src/processing/clean_data.py
-   python src/processing/transform_data.py
-   ```
-4. **Store Processed Data in BigQuery** *(Ensure Google Cloud credentials are set up)*
-   ```bash
-   python src/processing/upload_to_bigquery.py
-   ```
-5. **Train Machine Learning Model**
-   ```bash
-   python src/modeling/train_model.py
-   ```
-6. **Evaluate Model Performance**
-   ```bash
-   python src/modeling/evaluate_model.py
-   ```
-7. **Visualize Insights in Tableau**
-   - Open Tableau and load the dataset from `data/processed/`
-   - Load and interact with the prebuilt Tableau dashboard (`tableau/Crime_Analysis_Dashboard.twbx`)
-
----
+## Steps
+1. Clone this repository.
+2. Install dependencies: `pip install -r requirements.txt`.
+3. Fetch Crime Data [`download_data.py`](src/download_data.py)
+4. Clean and Transform Data [`data_preprocessing_before_bigquery.py`](src/data_preprocessing_before_bigquery.py).
+5. Store Processed Data in BigQuery  [`upload_to_bigquery.py`](src/upload_to_bigquery.py)
+6. Exploratory Data Analysis [`eda.ipynb`](notebooks/eda.ipynb), [`eda_geospatial.ipynb`](notebooks/eda_geospatial.ipynb).
+7. Train Machine Learning Model and Evaluate Model Performance [`la_crime_type_model_training_evaluation.py`](src/la_crime_type_model_training_evaluation.py)
+8. Connect the data to Tableau for visualization [`la_crime_model_results_visualization.py`](src/la_crime_model_results_visualization.py)
 
 ## 📊 Tableau Dashboard
-- **Crime Trends & Hotspots:** Interactive visualizations to analyze crime patterns.  
-
-
-🖥 **[View Interactive Tableau Dashboard](#)** *(To be added)*
+🖥 **[Crime Classification Confusion Matrix](#)** *(https://public.tableau.com/app/profile/anitta.antony/viz/CrimeClassificationConfusionMatrix/Model-ConfusionMatrix)*
+🖥 **[Crime Prediction Metrics (Precision, Recall, F1)](#)** *(https://public.tableau.com/app/profile/anitta.antony/viz/CrimePredictionMetricsPrecisionRecallF1/CrimeTypePrediction-ModelEvaluation)*
 
 ---
 
@@ -176,12 +144,11 @@ la-crime-analysis/
 - **Dataset Source**: [LA Open Data](https://data.lacity.org/Public-Safety/Crime-Data-from-2020-to-Present/)
 - **Google BigQuery Free Tier Guide**: [Google BigQuery](https://cloud.google.com/bigquery/pricing)
 - **Tableau Public**: [Tableau Public](https://public.tableau.com/)
-- **Apache Airflow Docs**: [Airflow](https://airflow.apache.org/)
 
 ---
 
 ## 📌 Why This Project Matters
 ✅ **Demonstrates expertise in data processing & analytics**  
 ✅ **Showcases hands-on experience with BigQuery, Polars, Pandas, and ML**  
-✅ **Presents actionable insights using Tableau dashboards**  
-✅ **End-to-end implementation from raw data to insights, with automation using Apache Airflow**  
+✅ **Presents insights using Tableau dashboards**  
+ 
