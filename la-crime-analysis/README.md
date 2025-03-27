@@ -110,7 +110,7 @@ la-crime-analysis/
 1. **Data Collection**: Crime data is sourced from the [LA Open Data Portal](https://catalog.data.gov/dataset/crime-data-from-2020-to-present).
 2. **Data Preprocessing**: The dataset undergoes cleaning and transformation using Pandas and Polars.
 3. **Database Integration**: Processed data is stored in **Google BigQuery** for analysis.
-4. **Exploratory Data Analysis**: Identify trends, seasonal patterns, and crime hotspots.
+4. **Exploratory Data Analysis**: Identify trends, seasonal patterns, and crime hotspots. Eg: ![Crime Trends by Hours](visualizations/exploratory_data_analysis_viz/crime_by_hour_of_day_barplot.png)
 5. **Machine Learning Model**: A **Logistic Regression model** is trained to analyze crime types.
 6. **Visualization & Reporting**: Insights on model efficiency are presented via **Tableau dashboards**.
 
