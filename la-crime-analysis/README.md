@@ -1,8 +1,5 @@
 # Los Angeles Crime Data Analysis
 
-**Author:** Anitta Antony  
-**Repository:** [GitHub - LA Crime Analysis](https://github.com/anitta-antony-92/data-portfolio-projects/tree/main/la-crime-analysis)  
-
 ---
 
 ## 📌 Project Overview
@@ -12,7 +9,7 @@ This project analyzes crime trends in Los Angeles using publicly available crime
 - **Data Collection & Preprocessing**: Extract, clean, and transform raw crime data.
 - **Database Integration**: Store and query processed data efficiently.
 - **Exploratory Data Analysis (EDA)**: Identify patterns, trends, and correlations.
-- **Machine Learning Model**: Attempting Machine Learning for the first time.
+- **Machine Learning Model**: Attempting Machine Learning for the first time. Used Logistic Regression model.
 - **Visualization & Reporting**: Generate interactive dashboards using **Tableau**.
 
 This project is part of my **data portfolio**, aimed at demonstrating end-to-end data analysis and  modeling workflows.
@@ -26,7 +23,7 @@ This project is part of my **data portfolio**, aimed at demonstrating end-to-end
 | **Data Storage**    | Google BigQuery (Free Tier)    |
 | **Data Processing** | Pandas, Polars, NumPy          |
 | **ML & Analytics**  | Scikit-learn          |
-| **Visualization**   | Tableau                         |
+| **Visualization**   | Tableau, Folium                         |
 | **Workflow**        | Jupyter Notebook, Python Scripts |
 
 ---
@@ -81,7 +78,7 @@ la-crime-analysis/
 │   ├── la_crime_model_results_visualization.py
 │   ├── la_crime_type_model_training_evaluation.py
 │   └── upload_to_bigquery.py
-│   └── src_extras/                                # Extra source code files for texting and explanations
+│   └── src_extras/                                # Extra source code files for texting and explanations - not needed
 │       ├── code_examples.py
 │       ├── confusion_matrix_conversion.py
 │       ├── data_preprocessing_before_bigquery_optimized_knn.py
@@ -110,11 +107,11 @@ la-crime-analysis/
 ---
 
 ## 📊 Data Workflow
-1. **Data Collection**: Crime data is sourced from the [LA Open Data Portal](https://data.lacity.org/Public-Safety/Crime-Data-from-2020-to-Present/).
+1. **Data Collection**: Crime data is sourced from the [LA Open Data Portal](https://catalog.data.gov/dataset/crime-data-from-2020-to-present).
 2. **Data Preprocessing**: The dataset undergoes cleaning and transformation using Pandas and Polars.
-3. **Exploratory Data Analysis**: Identify trends, seasonal patterns, and crime hotspots.
-4. **Machine Learning Model**: A model is trained to analyze crime types.
-5. **Database Integration**: Processed data is stored in **Google BigQuery** for analysis.
+3. **Database Integration**: Processed data is stored in **Google BigQuery** for analysis.
+4. **Exploratory Data Analysis**: Identify trends, seasonal patterns, and crime hotspots.
+5. **Machine Learning Model**: A **Logistic Regression model** is trained to analyze crime types.
 6. **Visualization & Reporting**: Insights on model efficiency are presented via **Tableau dashboards**.
 
 ---
@@ -126,7 +123,7 @@ la-crime-analysis/
 
 ## Steps
 1. Clone this repository.
-2. Install dependencies: `pip install -r requirements.txt`.
+2. Make sure necessary libraries are installed.
 3. Fetch Crime Data [`download_data.py`](src/download_data.py)
 4. Clean and Transform Data [`data_preprocessing_before_bigquery.py`](src/data_preprocessing_before_bigquery.py).
 5. Store Processed Data in BigQuery  [`upload_to_bigquery.py`](src/upload_to_bigquery.py)
@@ -135,13 +132,14 @@ la-crime-analysis/
 8. Connect the data to Tableau for visualization [`la_crime_model_results_visualization.py`](src/la_crime_model_results_visualization.py)
 
 ## 📊 Tableau Dashboard
-🖥 **[Crime Classification Confusion Matrix](#)** *(https://public.tableau.com/app/profile/anitta.antony/viz/CrimeClassificationConfusionMatrix/Model-ConfusionMatrix)*
-🖥 **[Crime Prediction Metrics (Precision, Recall, F1)](#)** *(https://public.tableau.com/app/profile/anitta.antony/viz/CrimePredictionMetricsPrecisionRecallF1/CrimeTypePrediction-ModelEvaluation)*
+
+- 🖥 [`Crime Classification Confusion Matrix`](https://public.tableau.com/app/profile/anitta.antony/viz/CrimeClassificationConfusionMatrix/Model-ConfusionMatrix)
+- 🖥 [`Crime Prediction Metrics (Precision, Recall, F1)`](https://public.tableau.com/app/profile/anitta.antony/viz/CrimePredictionMetricsPrecisionRecallF1/CrimeTypePrediction-ModelEvaluation)
 
 ---
 
 ## 🔗 Additional Resources
-- **Dataset Source**: [LA Open Data](https://data.lacity.org/Public-Safety/Crime-Data-from-2020-to-Present/)
+- **Dataset Source**: [LA Open Data](https://catalog.data.gov/dataset/crime-data-from-2020-to-present)
 - **Google BigQuery Free Tier Guide**: [Google BigQuery](https://cloud.google.com/bigquery/pricing)
 - **Tableau Public**: [Tableau Public](https://public.tableau.com/)
 
