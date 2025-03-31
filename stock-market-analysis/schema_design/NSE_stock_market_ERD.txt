@@ -1,0 +1,117 @@
+// Dimension Tables
+
+Table dim.Date {
+  Date date [primary key]
+  DayNumber integer
+  DayName varchar
+  WeekNumber integer
+  MonthNumber integer
+  MonthName varchar
+  Quarter integer
+  Year integer
+  IsWeekend boolean
+  IsHoliday boolean
+  IsTradingDay boolean
+  FiscalQuarter integer
+  FiscalQuarterStartDate date
+  FinancialYear varchar
+  Note: "Contains all dates from 2016-2021"
+}
+
+Table dim.SeriesType {
+  SeriesType char(2) [primary key]
+  SeriesName varchar
+  note: "Currently only contains 'EQ' (Equity)"
+}
+
+Table dim.Sector {
+  SectorID integer [primary key]
+  SectorName varchar
+  SectorDescription varchar
+  RegulatoryBody varchar
+  RiskCategory varchar
+  note: "Public/Private/Foreign bank classification"
+}
+
+Table dim.MarketCap {
+  MarketCapID char(2) [primary key]
+  CategoryName varchar
+  MinValue decimal(18,2)
+  MaxValue decimal(18,2)
+  CategoryDescription varchar
+  note: "Large Cap, Mid Cap, Small Cap etc."
+}
+
+Table dim.Bank {
+  BankID integer [primary key, increment]
+  BankStockSymbol varchar [unique]
+  BankName varchar
+  ISINCode varchar
+  SectorID integer
+  MarketCapID integer
+  ListingDate date
+  CurrentStatus varchar
+  StartDate date [note: "SCD effective date"]
+  EndDate date [note: "SCD expiration date"]
+  IsActive boolean
+  note: "Slowly Changing Dimension for bank attributes"
+}
+
+// Fact Table
+Table fact.DailyStockPrices {
+  TradeDate date
+  BankID integer
+  SeriesType varchar
+  PreviousClosePrice decimal(18,2)
+  OpeningPrice decimal(18,2)
+  HighestPrice decimal(18,2)
+  LowestPrice decimal(18,2)
+  LastTradedPrice decimal(18,2)
+  ClosingPrice decimal(18,2)
+  VWAP decimal(18,2)
+  TradedVolume bigint
+  DeliverableVolume bigint
+  PctDeliverable  decimal(5,4)
+  TotalTrades integer
+  TotalTradedValueTO decimal(30,4)
+  PRIMARY key (TradeDate, BankID)
+  note: "Daily metrics at bank level"
+}
+
+// Staging Table
+Table stg.NSEBankingStocks {
+  TradeDate date
+  BankStockSymbol varchar(20)
+  SeriesType char(2)
+  PreviousClosePrice decimal(18,2)
+  OpeningPrice decimal(18,2)
+  HighestPrice decimal(18,2)
+  LowestPrice decimal(18,2)
+  LastTradedPrice decimal(18,2)
+  ClosingPrice decimal(18,2)
+  VWAP decimal(18,2)
+  TradedVolume bigint
+  DeliverableVolume bigint
+  PctDeliverable decimal(5,4)
+  TotalTrades int
+  TotalTradedValueTO decimal(30,4)
+  DataLoadTime datetime
+  note: "Raw import structure matching CSV"
+}
+
+// Reference Tables
+Table ref.MarketHolidays {
+  HolidayDate date
+  HolidayName varchar(100)
+  IsBankHoliday boolean
+  IsNationalHoliday boolean
+  PRIMARY KEY (HolidayDate, HolidayName)
+}
+
+
+// Relationships
+Ref: fact.DailyStockPrices.TradeDate > dim.Date.Date
+Ref: fact.DailyStockPrices.BankID > dim.Bank.BankID 
+Ref: fact.DailyStockPrices.SeriesType > dim.SeriesType.SeriesType
+Ref: dim.Bank.SectorID > dim.Sector.SectorID
+Ref: dim.Bank.MarketCapID > dim.MarketCap.MarketCapID
