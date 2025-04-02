@@ -59,7 +59,7 @@ CREATE TABLE dim.Date (
     IsTradingDay bit NOT NULL,
     FiscalQuarter tinyint NOT NULL,
     FiscalQuarterStartDate date NOT NULL,
-    FinancialYear varchar(7) NOT NULL,
+    FinancialYear varchar(9) NOT NULL,
     CONSTRAINT PK_Date PRIMARY KEY ([Date]),
     CONSTRAINT CHK_Date_Valid CHECK ([Date] BETWEEN '2016-01-01' AND '2021-12-31')
 );
@@ -67,7 +67,7 @@ CREATE TABLE dim.Date (
 
 CREATE TABLE dim.Bank (
     BankID int NOT NULL IDENTITY(100,5),
-    BankStockSymbol varchar(10) NOT NULL,
+    BankStockSymbol varchar(20) NOT NULL,
     BankName varchar(100) NOT NULL,
     ISINCode varchar(12) NOT NULL,
     SectorID int NOT NULL,
