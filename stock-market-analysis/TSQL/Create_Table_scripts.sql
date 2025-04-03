@@ -87,7 +87,7 @@ CREATE TABLE dim.Bank (
 
 
 -- 3. Create staging table (loaded directly from CSV)
-CREATE TABLE stg.NSEBankingStocks (
+CREATE TABLE dbo.NSEBankingStocks (
     TradeDate date NOT NULL,
     BankStockSymbol varchar(20) NOT NULL,
     SeriesType char(2) NOT NULL,
