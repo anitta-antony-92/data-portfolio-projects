@@ -96,7 +96,7 @@ WHERE
     OR BankStockSymbol LIKE 'HDFC%';
 
 
-update dim.Bank B
+/*update dim.Bank B
 set B.Bankstocksymbol =
 	case 
 		when B.BankStockSymbol = 'HDFCBANK' then 'HDFC'
@@ -136,7 +136,7 @@ set B.Bankstocksymbol =
 	end
 WHERE BankStockSymbol IN ('HDFCBANK', 'IDFCBANK', 'EQUITAS', 'UJJIVAN'); -- wrong not working -- Incorrect syntax near 'B'.
 -- The issue is with the alias (B) in your UPDATE statement. T-SQL (SQL Server) does not support table aliases in UPDATE statements.
-
+*/
 update dim.Bank 
 set Bankstocksymbol =
 	case 
